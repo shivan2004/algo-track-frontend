@@ -1,0 +1,46 @@
+.layout-switch {
+  display: flex;
+  background-color: var(--color-muted-background);
+  border-radius: 9999px;
+  padding: 0.25rem;
+  transition: background-color 0.3s;
+}
+
+.layout-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-muted);
+  transition: all 0.2s ease;
+}
+
+.layout-button:focus {
+  outline: none;
+}
+
+.layout-button.active {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+.layout-button:not(.active):hover {
+  background-color: var(--color-border);
+  color: var(--color-foreground);
+}
+
+@media (max-width: 640px) {
+  .layout-button {
+    padding: 0.5rem 0.75rem;
+  }
+  
+  .layout-button span {
+    display: none;
+  }
+}
