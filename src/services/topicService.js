@@ -1,17 +1,34 @@
 import api from './api';
 
+const timeout = (ms) =>
+    new Promise((_, reject) =>
+        setTimeout(() => reject(new Error(`Request timed out after ${ms / 1000}s`)), ms)
+    );
+
 export const getAllTopics = async () => {
-  return await api.get('/api/topics/getAllTopics');
+  return Promise.race([
+    api.get('/api/topics/getAllTopics'),
+    timeout(5000),
+  ]);
 };
 
 export const getTopicById = async (topicId) => {
-  return await api.get(`/api/topics/getTopicById/${topicId}`);
+  return Promise.race([
+    api.get(`/api/topics/getTopicById/${topicId}`),
+    timeout(5000),
+  ]);
 };
 
 export const addTopic = async (topicData) => {
-  return await api.post('/api/topics/add', topicData);
+  return Promise.race([
+    api.post('/api/topics/add', topicData),
+    timeout(5000),
+  ]);
 };
 
 export const reorderTopics = async (reorderData) => {
-  return await api.post('/api/topics/re-order', reorderData);
+  return Promise.race([
+    api.post('/api/topics/re-order', reorderData),
+    timeout(5000),
+  ]);
 };

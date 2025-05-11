@@ -14,17 +14,23 @@ export const AuthProvider = ({ children }) => {
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    const token = localStorage.getItem('accessToken');
+    // Check URL parameters for OAuth redirect
+    const url = new URL(window.location.href);
+    const token = url.searchParams.get('token');
+    const roles = url.searchParams.get('roles');
+    const isVerified = url.searchParams.get('isVerified');
 
-    if (token) {
+    console.log(token)
+    console.log(roles)
+    if (token && roles) {
       try {
         const decodedToken = jwtDecode(token);
         const currentTime = Date.now() / 1000;
 
         if (decodedToken.exp > currentTime) {
-          const userRoles = localStorage.getItem('userRoles')
-              ? JSON.parse(localStorage.getItem('userRoles'))
-              : [];
+          const userRoles = JSON.parse(roles.replace(/\?/g, ''));
+          localStorage.setItem('accessToken', token);
+          localStorage.setItem('userRoles', JSON.stringify(userRoles));
 
           setUser({
             token,
@@ -32,11 +38,38 @@ export const AuthProvider = ({ children }) => {
           });
           setIsAuthenticated(true);
           setIsAdmin(userRoles.includes('ADMIN'));
-        } else {
-          handleLogout();
+
+          // Clean up URL parameters
+          window.history.replaceState({}, document.title, '/');
         }
       } catch (error) {
-        handleLogout();
+        console.error('Error processing OAuth redirect:', error);
+      }
+    } else {
+      // Regular token check
+      const storedToken = localStorage.getItem('accessToken');
+      if (storedToken) {
+        try {
+          const decodedToken = jwtDecode(storedToken);
+          const currentTime = Date.now() / 1000;
+
+          if (decodedToken.exp > currentTime) {
+            const userRoles = localStorage.getItem('userRoles')
+                ? JSON.parse(localStorage.getItem('userRoles'))
+                : [];
+
+            setUser({
+              token: storedToken,
+              roles: userRoles
+            });
+            setIsAuthenticated(true);
+            setIsAdmin(userRoles.includes('ADMIN'));
+          } else {
+            handleLogout();
+          }
+        } catch (error) {
+          handleLogout();
+        }
       }
     }
 

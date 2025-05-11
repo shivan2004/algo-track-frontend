@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -25,30 +26,34 @@ const queryClient = new QueryClient({
   },
 });
 
+const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider>
-        <AuthProvider>
-          <Router>
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/signup" element={<SignupPage />} />
-              <Route 
-                path="/admin" 
-                element={
-                  <AdminRoute>
-                    <AdminPage />
-                  </AdminRoute>
-                } 
-              />
-            </Routes>
-          </Router>
-          <ToastContainer position="top-right" autoClose={3000} />
-        </AuthProvider>
-      </ThemeProvider>
-    </QueryClientProvider>
+      <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+        <QueryClientProvider client={queryClient}>
+          <ThemeProvider>
+            <AuthProvider>
+              <Router>
+                <Routes>
+                  <Route path="/" element={<HomePage />} />
+                  <Route path="/login" element={<LoginPage />} />
+                  <Route path="/signup" element={<SignupPage />} />
+                  <Route
+                      path="/admin"
+                      element={
+                        <AdminRoute>
+                          <AdminPage />
+                        </AdminRoute>
+                      }
+                  />
+                </Routes>
+              </Router>
+              <ToastContainer position="top-right" autoClose={3000} />
+            </AuthProvider>
+          </ThemeProvider>
+        </QueryClientProvider>
+      </GoogleOAuthProvider>
   );
 }
 
