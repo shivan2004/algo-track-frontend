@@ -5,6 +5,7 @@ import { AuthContext } from '../contexts/AuthContext';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import './AuthPages.css';
+import {API_URL} from '../services/api.js'
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -141,7 +142,7 @@ const LoginPage = () => {
                 </div>
 
                 <div className="google-auth-container">
-                  <a href="http://localhost:8080/oauth2/authorization/google" className="auth-submit-button google-btn">
+                  <a href={`${API_URL}/oauth2/authorization/google`} className="auth-submit-button google-btn">
                     Login with Google
                   </a>
                 </div>
