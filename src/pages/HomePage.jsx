@@ -11,18 +11,11 @@ import LayoutSwitch from '../components/LayoutSwitch';
 
 function HomePage() {
   const { isAuthenticated } = useContext(AuthContext);
-  const [layoutType, setLayoutType] = useState(() => {
-    return localStorage.getItem('layoutType') || 'structured';
-  });
+  const [layoutType, setLayoutType] = useState(() => localStorage.getItem('layoutType') || 'structured');
   const queryClient = useQueryClient();
 
   const { data: topics = [], isLoading: isTopicsLoading, error: topicsError } = useQuery(
-      ['topics'],
-      getAllTopics,
-      {
-        staleTime: 60000,
-        retry: 1
-      }
+      ['topics'], getAllTopics, { staleTime: 60000, retry: 1 }
   );
 
   const { data: progress = { problemsSolved: 0, totalProblems: 0, solvedProblems: [] },
@@ -40,33 +33,29 @@ function HomePage() {
   };
 
   const handleProblemStatusChange = (problemId, isCompleted) => {
-    const newSolvedProblems = isCompleted
+    const newSolved = isCompleted
         ? [...progress.solvedProblems, problemId]
         : progress.solvedProblems.filter(id => id !== problemId);
 
     queryClient.setQueryData(['userProgress'], {
       ...progress,
-      problemsSolved: newSolvedProblems.length,
-      solvedProblems: newSolvedProblems
+      problemsSolved: newSolved.length,
+      solvedProblems: newSolved
     });
   };
 
   if (isTopicsLoading || isProgressLoading) {
     return (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="flex justify-center items-center h-64">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500"></div>
-          </div>
+        <div className="max-w-7xl mx-auto py-8 text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500 mx-auto" />
         </div>
     );
   }
 
   if (topicsError) {
     return (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="flex justify-center items-center h-64">
-            <div className="text-red-500 dark:text-red-400">Failed to load topics. Please try again later.</div>
-          </div>
+        <div className="max-w-7xl mx-auto py-8 text-center text-red-500">
+          Failed to load topics. Please try again later.
         </div>
     );
   }
@@ -74,14 +63,13 @@ function HomePage() {
   return (
       <div className="min-h-screen">
         <Header />
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <section className="mb-10">
-            <h1 className="text-3xl font-bold text-center text-primary-600 dark:text-primary-400 mb-4">
+        <div className="max-w-7xl mx-auto px-4 py-8">
+          <section className="mb-10 text-center">
+            <h1 className="text-3xl font-bold text-primary-600 dark:text-primary-400 mb-4">
               Master Data Structures and Algorithms
             </h1>
-            <p className="text-gray-700 dark:text-gray-300 text-center max-w-3xl mx-auto">
-              AlgoTrack provides a structured approach to learning DSA with carefully curated problems from top competitive programming platforms.
+            <p className="text-gray-700 dark:text-gray-300 max-w-3xl mx-auto">
+              AlgoTrack provides a structured approach to learning DSA with curated problems from top platforms.
             </p>
           </section>
 
@@ -97,11 +85,10 @@ function HomePage() {
               </section>
           )}
 
-          <section className="mb-8">
+          <section>
             <div className="flex justify-center mb-6">
               <LayoutSwitch layout={layoutType} setLayout={handleToggleLayout} />
             </div>
-
             <h2 className="text-2xl font-bold text-center text-primary-600 dark:text-primary-400 mb-6">
               Topics & Problems
             </h2>
@@ -120,7 +107,6 @@ function HomePage() {
             </div>
           </section>
         </div>
-
         <Footer />
       </div>
   );

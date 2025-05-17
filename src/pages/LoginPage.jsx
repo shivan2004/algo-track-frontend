@@ -1,20 +1,13 @@
-import React, { useState, useContext, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Eye, EyeOff, LogIn } from 'lucide-react';
+import React, { useContext, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import './AuthPages.css';
-import {API_URL} from '../services/api.js'
+import {API_URL} from "../services/api.js";
 
 const LoginPage = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-
-  const { login, isAuthenticated, isAdmin } = useContext(AuthContext);
+  const { isAuthenticated, isAdmin } = useContext(AuthContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -26,30 +19,6 @@ const LoginPage = () => {
       }
     }
   }, [isAuthenticated, isAdmin, navigate]);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setErrorMessage('');
-    setIsLoading(true);
-
-    try {
-      const result = await login({ email, password });
-
-      if (result.success) {
-        if (result.isAdmin) {
-          navigate('/admin');
-        } else {
-          navigate('/');
-        }
-      } else {
-        setErrorMessage(result.error || 'Login failed. Please try again.');
-      }
-    } catch (error) {
-      setErrorMessage('An unexpected error occurred. Please try again.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   return (
       <div className="auth-page">
@@ -79,78 +48,21 @@ const LoginPage = () => {
             </div>
 
             <div className="auth-form-container">
-              <form className="auth-form" onSubmit={handleSubmit}>
+              <div className="auth-form">
                 <h2 className="auth-form-title">Login to Your Account</h2>
 
-                {errorMessage && (
-                    <div className="auth-error">
-                      {errorMessage}
-                    </div>
-                )}
-
-                <div className="form-group">
-                  <label htmlFor="email" className="form-label">Email</label>
-                  <input
-                      id="email"
-                      type="email"
-                      className="form-input"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      required
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="password" className="form-label">Password</label>
-                  <div className="password-input-container">
-                    <input
-                        id="password"
-                        type={showPassword ? 'text' : 'password'}
-                        className="form-input password-input"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                    />
-                    <button
-                        type="button"
-                        className="password-toggle"
-                        onClick={() => setShowPassword(!showPassword)}
-                        aria-label={showPassword ? 'Hide password' : 'Show password'}
-                    >
-                      {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                    </button>
-                  </div>
-                </div>
-
-                <button
-                    type="submit"
-                    className="auth-submit-button"
-                    disabled={isLoading}
-                >
-                  {isLoading ? (
-                      <span className="loading-spinner"></span>
-                  ) : (
-                      <>
-                        <LogIn size={18} />
-                        <span>Login</span>
-                      </>
-                  )}
-                </button>
-
-                <div className="auth-divider">
-                  <span>or</span>
-                </div>
-
-                <div className="google-auth-container">
+                <div className="oauth-buttons">
                   <a href={`${API_URL}/oauth2/authorization/google`} className="auth-submit-button google-btn">
-                    Login with Google
+
+                  Continue with Google
+                  </a>
+
+                  <a href={`${API_URL}/oauth2/authorization/github`} className="auth-submit-button google-btn">
+
+                  Continue with GitHub
                   </a>
                 </div>
-
-                <p className="auth-alt-link">
-                  Don't have an account? <Link to="/signup">Sign up</Link>
-                </p>
-              </form>
+              </div>
             </div>
           </div>
         </main>
@@ -161,3 +73,4 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
+

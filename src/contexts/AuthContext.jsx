@@ -2,7 +2,6 @@ import React, { createContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 import { useQueryClient } from 'react-query';
-import { login, signup } from '../services/authService';
 
 export const AuthContext = createContext();
 
@@ -20,8 +19,6 @@ export const AuthProvider = ({ children }) => {
     const roles = url.searchParams.get('roles');
     const isVerified = url.searchParams.get('isVerified');
 
-    console.log(token)
-    console.log(roles)
     if (token && roles) {
       try {
         const decodedToken = jwtDecode(token);
@@ -76,46 +73,13 @@ export const AuthProvider = ({ children }) => {
     setLoading(false);
   }, []);
 
-  const handleLogin = async (credentials) => {
-    try {
-      const response = await login(credentials);
-      const { accessToken, roles } = response;
-
-      localStorage.setItem('accessToken', accessToken);
-      localStorage.setItem('userRoles', JSON.stringify(roles));
-
-      setUser({ token: accessToken, roles });
-      setIsAuthenticated(true);
-      setIsAdmin(roles.includes('ADMIN'));
-
-      return { success: true, isAdmin: roles.includes('ADMIN') };
-    } catch (error) {
-      return {
-        success: false,
-        error: error.response?.data?.error?.message || 'Login failed'
-      };
-    }
-  };
-
-  const handleSignup = async (userData) => {
-    try {
-      await signup(userData);
-      return { success: true };
-    } catch (error) {
-      return {
-        success: false,
-        error: error.response?.data?.error?.message || 'Signup failed'
-      };
-    }
-  };
-
   const handleLogout = () => {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('userRoles');
     setUser(null);
     setIsAuthenticated(false);
     setIsAdmin(false);
-    queryClient.clear(); // Clear all React Query cache
+    queryClient.clear();
   };
 
   return (
@@ -125,8 +89,6 @@ export const AuthProvider = ({ children }) => {
             isAuthenticated,
             isAdmin,
             loading,
-            login: handleLogin,
-            signup: handleSignup,
             logout: handleLogout
           }}
       >

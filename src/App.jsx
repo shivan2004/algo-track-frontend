@@ -1,7 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import { GoogleOAuthProvider } from '@react-oauth/google';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -11,50 +10,43 @@ import ProtectedRoute from './components/ProtectedRoute';
 import AdminRoute from './components/AdminRoute';
 
 import HomePage from './pages/HomePage';
-import LoginPage from './pages/LoginPage';
-import SignupPage from './pages/SignupPage';
+import AuthPage from './pages/AuthPage';
 import AdminPage from './pages/AdminPage';
 
-// Create React Query client
 const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      refetchOnWindowFocus: false,
-      retry: 1,
-      staleTime: 5 * 60 * 1000,
+    defaultOptions: {
+        queries: {
+            refetchOnWindowFocus: false,
+            retry: 1,
+            staleTime: 5 * 60 * 1000,
+        },
     },
-  },
 });
 
-const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
-
 function App() {
-  return (
-      <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+    return (
         <QueryClientProvider client={queryClient}>
-          <ThemeProvider>
-            <AuthProvider>
-              <Router>
-                <Routes>
-                  <Route path="/" element={<HomePage />} />
-                  <Route path="/login" element={<LoginPage />} />
-                  <Route path="/signup" element={<SignupPage />} />
-                  <Route
-                      path="/admin"
-                      element={
-                        <AdminRoute>
-                          <AdminPage />
-                        </AdminRoute>
-                      }
-                  />
-                </Routes>
-              </Router>
-              <ToastContainer position="top-right" autoClose={3000} />
-            </AuthProvider>
-          </ThemeProvider>
+            <ThemeProvider>
+                <AuthProvider>
+                    <Router>
+                        <Routes>
+                            <Route path="/" element={<HomePage />} />
+                            <Route path="/auth" element={<AuthPage />} />
+                            <Route
+                                path="/admin"
+                                element={
+                                    <AdminRoute>
+                                        <AdminPage />
+                                    </AdminRoute>
+                                }
+                            />
+                        </Routes>
+                        <ToastContainer position="top-right" autoClose={3000} />
+                    </Router>
+                </AuthProvider>
+            </ThemeProvider>
         </QueryClientProvider>
-      </GoogleOAuthProvider>
-  );
+    );
 }
 
 export default App;
