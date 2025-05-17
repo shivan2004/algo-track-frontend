@@ -51,12 +51,13 @@ const AuthPage = () => {
                         <div className="auth-form">
                             <h2 className="auth-form-title">Get Started</h2>
 
+
                             <div className="oauth-buttons">
-                                <a href={`${API_URL}/oauth2/authorization/google`} className="auth-submit-button google-btn">
+                                <a href={`${API_URL}/oauth2/authorization/google`} className="oauth-button google-btn">
                                     Continue with Google
                                 </a>
 
-                                <a href={`${API_URL}/oauth2/authorization/github`} className="auth-submit-button github-btn">
+                                <a href={`${API_URL}/oauth2/authorization/github`} className="oauth-button github-btn">
                                     Continue with GitHub
                                 </a>
                             </div>
