@@ -4,6 +4,7 @@ import { AuthContext } from '../contexts/AuthContext';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import './AuthPages.css';
+import {API_URL} from "../services/api.js";
 
 const AuthPage = () => {
     const { isAuthenticated, isAdmin } = useContext(AuthContext);
@@ -51,11 +52,11 @@ const AuthPage = () => {
                             <h2 className="auth-form-title">Get Started</h2>
 
                             <div className="oauth-buttons">
-                                <a href="http://localhost:8080/oauth2/authorization/google" className="oauth-button google-btn">
+                                <a href={`${API_URL}/oauth2/authorization/google`} className="auth-submit-button google-btn">
                                     Continue with Google
                                 </a>
 
-                                <a href="http://localhost:8080/oauth2/authorization/github" className="oauth-button github-btn">
+                                <a href={`${API_URL}/oauth2/authorization/github`} className="auth-submit-button github-btn">
                                     Continue with GitHub
                                 </a>
                             </div>
