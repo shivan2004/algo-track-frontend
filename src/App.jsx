@@ -12,6 +12,7 @@ import AdminRoute from './components/AdminRoute';
 import HomePage from './pages/HomePage';
 import AuthPage from './pages/AuthPage';
 import AdminPage from './pages/AdminPage';
+import NotFoundPage from './pages/NotFoundPage';
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -40,6 +41,7 @@ function App() {
                                     </AdminRoute>
                                 }
                             />
+                            <Route path="*" element={<NotFoundPage />} />
                         </Routes>
                         <ToastContainer position="top-right" autoClose={3000} />
                     </Router>

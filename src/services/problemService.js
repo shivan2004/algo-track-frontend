@@ -19,6 +19,20 @@ export const addProblem = async (problemData) => {
   ]);
 };
 
+export const updateProblem = async (problemData) => {
+  return Promise.race([
+    api.put('/api/problems/update-problem', problemData),
+    timeout(5000),
+  ]);
+};
+
+export const deleteProblem = async (problemId) => {
+  return Promise.race([
+    api.post(`/api/problems/delete-problem/${problemId}`),
+    timeout(5000),
+  ]);
+};
+
 export const reorderProblems = async (topicId, reorderData) => {
   return Promise.race([
     api.post(`/api/problems/re-order/${topicId}`, reorderData),

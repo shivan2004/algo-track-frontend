@@ -26,6 +26,20 @@ export const addTopic = async (topicData) => {
   ]);
 };
 
+export const updateTopic = async (topicData) => {
+  return Promise.race([
+    api.put('/api/topics/update-topic', topicData),
+    timeout(5000),
+  ]);
+};
+
+export const deleteTopic = async (topicId) => {
+  return Promise.race([
+    api.put(`/api/topics/delete-topic/${topicId}`),
+    timeout(5000),
+  ]);
+};
+
 export const reorderTopics = async (reorderData) => {
   return Promise.race([
     api.post('/api/topics/re-order', reorderData),
