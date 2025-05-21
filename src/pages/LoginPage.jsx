@@ -47,6 +47,7 @@ const LoginPage = () => {
               </div>
             </div>
 
+
             <div className="auth-form-container">
               <div className="auth-form">
                 <h2 className="auth-form-title">Login to Your Account</h2>
