@@ -52,33 +52,41 @@ function ProblemItem({ problem, isSolved, onStatusChange, isAuthenticated, layou
   const { title, link, platform, problemOrder } = problem;
   const isUpdating = markMutation.isLoading || unmarkMutation.isLoading;
 
-  return (
-      <div className={`${layoutType === 'structured' ? 'card py-2 px-3 mb-2' : 'border-b py-3'} flex items-center space-x-3`}>
-        <input
-            type="checkbox"
-            checked={checked}
-            onChange={handleCheckboxChange}
-            disabled={isUpdating}
-            className="h-5 w-5 text-primary-600 cursor-pointer rounded border-gray-300"
-        />
 
-        <div className="flex-grow">
-          <a
-              href={link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm font-medium text-gray-900 dark:text-gray-100 hover:text-primary-600 dark:hover:text-primary-400 flex items-center"
-          >
-            {title} <ExternalLink size={14} className="ml-1" />
-          </a>
-          <div className="mt-1">
-          <span className={`inline-block px-2 py-0.5 rounded text-xs font-medium ${platformColors[platform] || 'bg-gray-300 text-black'}`}>
-            {platform}
-          </span>
+  return (
+      <div className={`${layoutType === 'structured' ? 'card py-4 px-3 mb-2' : 'border-b border-gray-200 dark:border-dark-700 py-3'}`}>
+        <div className="flex items-center space-x-3">
+          <div className="flex-shrink-0">
+            <input
+                type="checkbox"
+                checked={checked}
+                onChange={handleCheckboxChange}
+                disabled={isUpdating}
+                className="h-5 w-5 text-primary-600 dark:text-primary-500 rounded border-gray-300 dark:border-dark-600 focus:ring-primary-500 dark:focus:ring-primary-400 cursor-pointer"
+            />
+          </div>
+
+          <div className="flex-grow">
+            <a
+                href={link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm font-medium text-gray-900 dark:text-gray-100 hover:text-primary-600 dark:hover:text-primary-400 flex items-center"
+            >
+              {title} <ExternalLink size={14} className="ml-1" />
+            </a>
+
+            <div className="mt-1">
+            <span className={`platform-badge ${platform.toLowerCase()}`}>
+              {platform}
+            </span>
+            </div>
+          </div>
+
+          <div className="flex-shrink-0 text-xs text-gray-500 dark:text-gray-400">
+            #{problemOrder}
           </div>
         </div>
-
-        <div className="text-xs text-gray-500 dark:text-gray-400 flex-shrink-0">#{problemOrder}</div>
       </div>
   );
 }
